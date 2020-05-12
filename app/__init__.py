@@ -6,13 +6,20 @@ from flask_sqlalchemy import SQLAlchemy
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+    POSTGRES_URL = 'db:5432'
+    #POSTGRES_URL = 'localhost:5432'
+    POSTGRES_USER = 'user'
+    POSTGRES_PW = 'pass'
+    POSTGRES_DB = 'test'
+    DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
+    app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['CELERY_BROKER_URL'] = 'redis://redis:6379'
     app.config['CELERY_RESULT_BACKEND'] = 'redis://redis:6379'
-    # app.config['CELERY_BROKER_URL'] = 'redis://192.168.1.79:6379'
-    # app.config['CELERY_RESULT_BACKEND'] = 'redis://192.168.1.79:6379'
-    app.config.timezone   = 'Europe/London'
+    #app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379'
+    #app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379'
+    app.config.timezone   = 'Europe/Moscow'
     app.config.enable_utc   = True
     app.debug = True
     return app

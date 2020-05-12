@@ -39,8 +39,6 @@ def hello_world():
 
 @celery.task
 def celery_test(dburlid, word):
-    #from app import db
-    print("fff")
     task = Tasks.query.get(dburlid)
     task.task_status = 'PENDING'
     db.session.commit()
@@ -63,7 +61,7 @@ def add_url():
     db_url = Tasks(address = path, timestamp = datetime.now(tz=None), task_status = 'NOT_STARTED', http_status = 101)
     db.session.add(db_url)
     db.session.commit()
-    # print(db_url._id," ",db_url.address)
+
     #Запуск в бэкграунде
     celery_test.delay(db_url._id,'python')
     return redirect('/')
